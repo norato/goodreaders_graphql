@@ -1,5 +1,6 @@
 import fetch from 'node-fetch';
 import { parseString } from 'xml2js';
+import * as DataLoader from 'dataloader';
 
 const BASE_URL = 'https://www.goodreads.com/';
 const API_KEY = 'sFiBmcUPg84JpH09Mu4ReQ';
@@ -25,3 +26,11 @@ export async function fetchXML(endpoint: Endpoints, id: number) {
 
   return response;
 }
+
+export const authorLoader = new DataLoader(ids =>
+  Promise.all(ids.map((id: number) => fetchXML(Endpoints.Author, id)))
+);
+
+export const bookLoader = new DataLoader(ids =>
+  Promise.all(ids.map((id: number) => fetchXML(Endpoints.Book, id)))
+);

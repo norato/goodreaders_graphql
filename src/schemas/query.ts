@@ -1,5 +1,5 @@
 import { GraphQLObjectType, GraphQLInt } from 'graphql';
-import { fetchXML, Endpoints } from 'helpers/fetchXML';
+import { authorLoader } from 'helpers/fetchXML';
 import { AuthorType } from './author.type';
 
 export const query = new GraphQLObjectType({
@@ -11,7 +11,7 @@ export const query = new GraphQLObjectType({
       args: {
         id: { type: GraphQLInt }
       },
-      resolve: (root, args) => fetchXML(Endpoints.Author, args.id)
+      resolve: (root, args) => authorLoader.load(args.id)
     }
   })
 });

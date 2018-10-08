@@ -1,7 +1,7 @@
 import { GraphQLObjectType, GraphQLString, GraphQLList } from 'graphql';
 import { translate } from 'helpers/translate';
 import { AuthorType } from './author.type';
-import { fetchXML, Endpoints } from 'helpers/fetchXML';
+import { authorLoader } from 'helpers/fetchXML';
 
 export const BookType = new GraphQLObjectType({
   name: 'Book',
@@ -26,7 +26,7 @@ export const BookType = new GraphQLObjectType({
       resolve: xml => {
         const authors = xml.GoodreadsResponse.book[0].authors[0].author;
         const ids = authors.map(author => author.id[0]);
-        return Promise.all(ids.map(id => fetchXML(Endpoints.Author, id)));
+        return authorLoader.loadMany(ids);
       }
     }
   })
